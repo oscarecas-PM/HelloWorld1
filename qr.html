@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scan to Play</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      min-height: 100vh;
+      background: linear-gradient(150deg, #f7efe4 0%, #ecdcc8 100%);
+      font-family: 'Georgia', serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+    h1 {
+      font-size: 1.5rem;
+      color: #3d2b1a;
+      margin-bottom: 8px;
+    }
+    p {
+      font-size: 0.95rem;
+      color: #8a6a52;
+      font-style: italic;
+      margin-bottom: 32px;
+    }
+    .qr-box {
+      background: #fff9f4;
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 8px 32px rgba(60, 40, 20, 0.14);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 28px;
+    }
+    canvas { display: block; }
+    .url {
+      font-size: 0.85rem;
+      color: #8a6a52;
+      letter-spacing: 0.3px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Let's Get to Know Each Other</h1>
+  <p>Scan the code to join in</p>
+  <div class="qr-box">
+    <canvas id="qr"></canvas>
+  </div>
+  <span class="url">helloworld1-rho.vercel.app</span>
+
+  <script>
+    // Minimal QR Code generator (QR Code Model 2, alphanumeric)
+    // Based on the qr-creator pattern — generates to canvas
+    (function(){
+      // QR Code generator adapted from kazuhikoarase/qrcode-generator (MIT)
+      var qrcode=function(){var e={L:1,M:0,Q:3,H:2},t=function(t,r){var o=236,a=17,n=t,i=e[r],s=null,l=0,u=null,c=new Array,f=null,g=0,h=function(e,t,r){var o=v(e,t);for(var a=0;a<r.length;a++)for(var n=0;n<8;n++)o.buffer[a]>=0&&(e[Math.floor(o.buffer[a]/t)][o.buffer[a]%t]=(r[a]>>>7-n&1)==1),o.buffer[a]--;},d=function(e,t){for(var r=n<<3|t,o=p.getBCHTypeInfo(r),a=0;a<15;a++){var i=(o>>a&1)==1;a<6?e[a][8]=i:a<8?e[a+1][8]=i:e[l-15+a][8]=i;a<8?e[8][l-a-1]=i:a<9?e[8][15-a-1+1]=i:e[8][15-a-1]=i}e[l-8][8]=1;},m=function(e){for(var t=p.getPatternPosition(n),r=0;r<t.length;r++)for(var o=0;o<t.length;o++){if(e[t[r]][t[o]]!=null)continue;for(var a=-2;a<=2;a++)for(var i=-2;i<=2;i++)e[t[r]+a][t[o]+i]=a==-2||a==2||i==-2||i==2||a==0&&i==0?!0:!1}},b=function(e){for(var t=p.getBCHTypeNumber(n),r=0;r<18;r++){var o=(t>>r&1)==1;e[Math.floor(r/3)][r%3+l-8-3]=o}for(var r=0;r<18;r++){var o=(t>>r&1)==1;e[r%3+l-8-3][Math.floor(r/3)]=o}},w=function(e,t){for(var r=0,o=0,a=-1,n=l-1;n>0;n-=2){n==6&&n--;for(;;){for(var s=0;s<2;s++)e[o][n-s]==null&&(e[o][n-s]=!1,r<t.length&&(e[o][n-s]=(t[r]>>>g&1)==1,g--,g==-1&&(r++,g=7)));o+=a;if(o<0||l<=o){o-=a,a=-a;break}}}},y=function(e,t){for(var r=0,o=0,a=0,n=new Array(t.length),i=new Array(t.length),s=0;s<t.length;s++){var l=t[s].dataCount,u=t[s].totalCount-l;o=Math.max(o,l),a=Math.max(a,u),n[s]=new Array(l);for(var c=0;c<n[s].length;c++)n[s][c]=255&e.buffer[c+r];r+=l;var f=p.getErrorCorrectPolynomial(u),g=E(n[s],f.getLength()-1),h=g.mod(f);i[s]=new Array(f.getLength()-1);for(var c=0;c<i[s].length;c++){var d=c+h.getLength()-i[s].length;i[s][c]=d>=0?h.get(d):0}}var m=0;for(var c=0;c<t.length;c++)m+=t[c].totalCount;var b=new Array(m),w=0;for(var c=0;c<o;c++)for(var s=0;s<t.length;s++)c<n[s].length&&(b[w]=n[s][c],w++);for(var c=0;c<a;c++)for(var s=0;s<t.length;s++)c<i[s].length&&(b[w]=i[s][c],w++);return b},v=function(e,t){for(var r=0,o=0,n=0,s=new Array,c=0;c<l;c++){var g=new Array;for(var h=0;h<l;h++){var d=!1;for(var m=0;m<s.length;m++)if(s[m][0]==c&&s[m][1]==h){d=!0;break}g.push(d?-1:null)}f.push(g)}var p=function(e,t){if(f[e][t]!=null)return;for(var a=-2;a<=2;a++)for(var n=-2;n<=2;n++)if(a==-2||a==2||n==-2||n==2||a==0&&n==0){var i=e+a,c=t+n;if(0<=i&&i<l&&0<=c&&c<l){f[i][c]=!0;s.push([i,c])}}};p(0,0),p(l-7,0),p(0,l-7);for(var b=8;b<l-8;b++){if(f[b][6]!=null)continue;f[b][6]=b%2==0;s.push([b,6])}for(var b=8;b<l-8;b++){if(f[6][b]!=null)continue;f[6][b]=b%2==0;s.push([6,b])}return{buffer:function(){var e=new Array;for(var t=l-1;t>=0;t-=2){t==6&&t--;for(var r=0;r<l;r++){var o=(n&1)==0?r:l-1-r;for(var a=0;a<2;a++){if(f[o][t-a]!=null)continue;e.push(o*l+(t-a))}if(e.length>=8)return{buffer:e.splice(0,8)}}n++}return{buffer:e}}().buffer};};var S=function(e){var t=p.getLostPoint(e);return t};return{addData:function(e){var t=A(4,4);t.put(e.length,p.getLengthInBits(4,n)),e.split("").forEach(function(e){t.put(e.charCodeAt(0),8)}),c.push({mode:4,data:e,buffer:t})},make:function(){if(n<1){for(n=1;n<40;n++){var e=p.getRSBlocks(n,i),t=0;for(var r=0;r<e.length;r++)t+=e[r].dataCount;var s=0;for(var r=0;r<c.length;r++)s+=c[r].buffer.getLengthInBits();if(s<=t*8)break}}l=n*4+17;f=new Array(l);for(var u=0;u<l;u++){f[u]=new Array(l);for(var g=0;g<l;g++)f[u][g]=null}(function(e){for(var t=-1;t<=7;t++)for(var r=-1;r<=7;r++){if(0+t<0||l<=0+t||0+r<0||l<=0+r)continue;(0<=t&&t<=6&&(r==0||r==6)||0<=r&&r<=6&&(t==0||t==6)||2<=t&&t<=4&&2<=r&&r<=4)?e[0+t][0+r]=!0:e[0+t][0+r]=!1}for(var t=-1;t<=7;t++)for(var r=-1;r<=7;r++){if(l-7-1+t<0||l<=l-7-1+t||0+r<0||l<=0+r)continue;(0<=t&&t<=6&&(r==0||r==6)||0<=r&&r<=6&&(t==0||t==6)||2<=t&&t<=4&&2<=r&&r<=4)?e[l-7-1+t][0+r]=!0:e[l-7-1+t][0+r]=!1}for(var t=-1;t<=7;t++)for(var r=-1;r<=7;r++){if(0+t<0||l<=0+t||l-7-1+r<0||l<=l-7-1+r)continue;(0<=t&&t<=6&&(r==0||r==6)||0<=r&&r<=6&&(t==0||t==6)||2<=t&&t<=4&&2<=r&&r<=4)?e[0+t][l-7-1+r]=!0:e[0+t][l-7-1+r]=!1}})(f),m(f),function(e){for(var t=8;t<l-8;t++){if(e[t][6]!=null)continue;e[t][6]=t%2==0}for(var t=8;t<l-8;t++){if(e[6][t]!=null)continue;e[6][t]=t%2==0}}(f),n>=7&&b(f);var C=p.getRSBlocks(n,i),x=A(0,0);for(var r=0;r<c.length;r++){var E=c[r];x.put(E.buffer.buffer,E.buffer.getLengthInBits())}var T=0;for(var r=0;r<C.length;r++)T+=C[r].dataCount;if(x.getLengthInBits()>T*8)throw new Error("code length overflow. ("+x.getLengthInBits()+">"+T*8+")");x.getLengthInBits()+4<=T*8&&x.put(0,4);while(x.getLengthInBits()%8!=0)x.putBit(!1);while(!(x.getLengthInBits()>=T*8)){x.put(o,8);if(x.getLengthInBits()>=T*8)break;x.put(a,8)}var k=y(x,C),B=0,I=function(e,t){for(var r=-Infinity,o=0;o<8;o++){h(e,t,k);d(e,o);var a=S(e);(r===-Infinity||a<r)&&(r=a,B=o);d(e,o);for(var n=0;n<t;n++)for(var i=0;i<t;i++)e[n][i]=e[n][i]===!0||e[n][i]===!1?null:e[n][i]}};I(f,l);h(f,l,k);d(f,B);w(f,B);s=f},getModuleCount:function(){return l},isDark:function(e,t){return s[e][t]===!0},createSvgTag:function(e,t){e=e||2,t=t||e*4;var r=l*e+t*2,o='<svg width="'+r+'" height="'+r+'" viewBox="0 0 '+r+" "+r+'" xmlns="http://www.w3.org/2000/svg">';o+='<rect width="'+r+'" height="'+r+'" fill="#fff9f4"/>';for(var a=0;a<l;a++)for(var n=0;n<l;n++)s[a][n]&&(o+='<rect x="'+(n*e+t)+'" y="'+(a*e+t)+'" width="'+e+'" height="'+e+'" fill="#3d2b1a"/>');return o+"</svg>"}}};var p={getBCHTypeInfo:function(e){for(var t=e<<10;p.getBCHDigit(t)-p.getBCHDigit(1335)>=0;)t^=1335<<p.getBCHDigit(t)-p.getBCHDigit(1335);return(e<<10|t)^21522},getBCHTypeNumber:function(e){for(var t=e<<12;p.getBCHDigit(t)-p.getBCHDigit(7973)>=0;)t^=7973<<p.getBCHDigit(t)-p.getBCHDigit(7973);return e<<12|t},getBCHDigit:function(e){for(var t=0;e!=0;)t++,e>>>=1;return t},getPatternPosition:function(e){return[[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50],[6,30,54],[6,32,58],[6,34,62],[6,26,46,66],[6,26,48,70],[6,26,50,74],[6,30,54,78],[6,30,56,82],[6,30,58,86],[6,34,62,90],[6,28,50,72,94],[6,26,50,74,98],[6,30,54,78,102],[6,28,54,80,106],[6,32,58,84,110],[6,30,58,86,114],[6,34,62,90,118],[6,26,50,74,98,122],[6,30,54,78,102,126],[6,26,52,78,104,130],[6,30,56,82,108,134],[6,34,60,86,112,138],[6,30,58,86,114,142],[6,34,62,90,118,146],[6,30,54,78,102,126,150],[6,24,50,76,102,128,154],[6,28,54,80,106,132,158],[6,32,58,84,110,136,162],[6,26,54,82,110,138,166],[6,30,58,86,114,142,170]][e-1]},getErrorCorrectPolynomial:function(e){for(var t=E([1],0),r=0;r<e;r++)t=t.multiply(E([1,C.gexp(r)],0));return t},getLengthInBits:function(e,t){if(e==4)return t<10?8:16;throw"mode:"+e},getLostPoint:function(e){for(var t=e.length,r=0,o=0;o<t;o++)for(var a=0;a<t;a++){for(var n=0,i=0;i<3;i++){if(o+i>=t||a+i>=t)break;e[o+i][a+i]===e[o][a]?n++:n=0;if(n>=3)break}if(n>=3)continue;var s=!0;for(var i=-1;i<=1;i++)for(var l=-1;l<=1;l++){if(o+i<0||o+i>=t||a+l<0||a+l>=t)continue;if(i==0&&l==0)continue;e[o+i][a+l]!==e[o][a]&&(s=!1)}s&&(r+=3)}for(var o=0;o<t-1;o++)for(var a=0;a<t-1;a++){var u=0;e[o][a]&&u++,e[o+1][a]&&u++,e[o][a+1]&&u++,e[o+1][a+1]&&u++;if(u==0||u==4)r+=3}for(var o=0;o<t;o++)for(var a=0;a<t-6;a++)e[o][a]&&!e[o][a+1]&&e[o][a+2]&&e[o][a+3]&&e[o][a+4]&&!e[o][a+5]&&e[o][a+6]&&(r+=40);for(var a=0;a<t;a++)for(var o=0;o<t-6;o++)e[o][a]&&!e[o+1][a]&&e[o+2][a]&&e[o+3][a]&&e[o+4][a]&&!e[o+5][a]&&e[o+6][a]&&(r+=40);var c=0;for(var a=0;a<t;a++)for(var o=0;o<t;o++)e[o][a]&&c++;return r+=Math.abs(100*c/t/t-50)/5*10,r},getRSBlocks:function(e,t){var r=function(){var r=[[1,26,19],[1,26,16],[1,26,13],[1,26,9],[1,44,34],[1,44,28],[1,44,22],[1,44,16],[1,70,55],[1,70,44],[2,35,17],[2,35,13],[1,100,80],[2,50,32],[2,50,24],[4,25,9],[1,134,108],[2,67,43],[2,33,15,2,34,16],[2,33,11,2,34,12],[2,86,68],[4,43,27],[4,43,19],[4,43,15],[2,98,78],[4,49,31],[2,32,14,4,33,15],[4,39,13,1,40,14],[2,121,97],[2,60,38,2,61,39],[4,40,18,2,41,19],[4,40,14,2,41,15],[2,146,116],[3,58,36,2,59,37],[4,36,16,4,37,17],[4,36,12,4,37,13],[2,86,68,2,87,69],[4,69,43,1,70,44],[6,43,19,2,44,20],[6,43,15,2,44,16],[4,101,81],[1,80,50,4,81,51],[4,50,22,4,51,23],[3,36,12,8,37,13],[2,116,92,2,117,93],[6,58,36,2,59,37],[4,46,20,6,47,21],[7,42,14,4,43,15],[4,133,107],[8,59,37,1,60,38],[8,44,20,4,45,21],[12,33,11,4,34,12],[3,145,115,1,146,116],[4,64,40,5,65,41],[11,36,16,5,37,17],[11,36,12,5,37,13],[5,109,87,1,110,88],[5,65,41,5,66,42],[5,54,24,7,55,25],[11,36,12],[5,122,98,1,123,99],[7,73,45,3,74,46],[15,43,19,2,44,20],[3,45,15,13,46,16],[1,135,107,5,136,108],[10,74,46,1,75,47],[1,50,22,15,51,23],[2,42,14,17,43,15],[5,150,120,1,151,121],[9,69,43,4,70,44],[17,50,22,1,51,23],[2,42,14,19,43,15],[3,141,113,4,142,114],[3,70,44,11,71,45],[17,47,21,4,48,22],[9,39,13,16,40,14],[3,135,107,5,136,108],[3,67,41,13,68,42],[15,54,24,5,55,25],[15,43,15,10,44,16],[4,144,116,4,145,117],[17,68,42],[17,50,22,6,51,23],[19,46,16,6,47,17],[2,139,111,7,140,112],[17,74,46],[7,54,24,16,55,25],[34,37,13],[4,151,121,5,152,122],[4,75,47,14,76,48],[11,54,24,14,55,25],[16,45,15,14,46,16],[6,147,117,4,148,118],[6,73,45,14,74,46],[11,54,24,16,55,25],[30,46,16,2,47,17],[8,132,106,4,133,107],[8,75,47,13,76,48],[7,54,24,22,55,25],[22,45,15,13,46,16],[10,142,114,2,143,115],[19,74,46,4,75,47],[28,50,22,6,51,23],[33,46,16,4,47,17],[8,152,122,4,153,123],[22,73,45,3,74,46],[8,53,23,26,54,24],[12,45,15,28,46,16],[3,147,117,10,148,118],[3,73,45,23,74,46],[4,54,24,31,55,25],[11,45,15,31,46,16],[7,146,116,7,147,117],[21,73,45,7,74,46],[1,53,23,37,54,24],[19,45,15,26,46,16],[5,145,115,10,146,116],[19,75,47,10,76,48],[15,54,24,25,55,25],[23,45,15,25,46,16],[13,145,115,3,146,116],[2,74,46,29,75,47],[42,54,24,1,55,25],[23,45,15,28,46,16],[17,145,115],[10,74,46,23,75,47],[10,54,24,35,55,25],[19,45,15,35,46,16],[17,145,115,1,146,116],[14,74,46,21,75,47],[29,54,24,19,55,25],[11,45,15,46,46,16],[13,145,115,6,146,116],[14,74,46,23,75,47],[44,54,24,7,55,25],[59,46,16,1,47,17],[12,151,121,7,152,122],[12,75,47,26,76,48],[39,54,24,14,55,25],[22,45,15,41,46,16],[6,151,121,14,152,122],[6,75,47,34,76,48],[46,54,24,10,55,25],[2,45,15,64,46,16],[17,152,122,4,153,123],[29,74,46,14,75,47],[49,54,24,10,55,25],[24,45,15,46,46,16],[4,152,122,18,153,123],[13,74,46,32,75,47],[48,54,24,14,55,25],[42,45,15,32,46,16],[20,147,117,4,148,118],[40,75,47,7,76,48],[43,54,24,22,55,25],[10,45,15,67,46,16],[19,148,118,6,149,119],[18,75,47,31,76,48],[34,54,24,34,55,25],[20,45,15,61,46,16]];return r[(e-1)*4+t]}();for(var o=new Array,a=0;a<r.length;a+=3)for(var n=r[a],i=0;i<n;i++)o.push({totalCount:r[a+1],dataCount:r[a+2]});return o}};var C=function(){for(var e=new Array(256),t=new Array(256),r=0;r<8;r++)e[r]=1<<r;for(var r=8;r<256;r++)e[r]=e[r-4]^e[r-5]^e[r-6]^e[r-8];for(var r=0;r<255;r++)t[e[r]]=r;return{glog:function(e){return t[e]},gexp:function(t){return e[t%255]}}}();var E=function(e,t){var r=e;if(r.length<t+1){var o=new Array(t+1-r.length);for(var a=0;a<o.length;a++)o[a]=0;r=r.concat(o)}return{get:function(e){return r[e]},getLength:function(){return r.length},multiply:function(e){for(var t=new Array(r.length+e.getLength()-1),o=0;o<r.length;o++)for(var a=0;a<e.getLength();a++)t[o+a]^=C.gexp((C.glog(r[o])+C.glog(e.get(a)))%255);return E(t,0)},mod:function(e){if(r.length-e.getLength()<0)return this;for(var t=C.glog(r[0])-C.glog(e.get(0)),o=new Array(r.length),a=0;a<r.length;a++)o[a]=r[a];for(var a=0;a<e.getLength();a++)o[a]^=C.gexp((C.glog(e.get(a))+t)%255);return E(o,0).mod(e)}}};var A=function(e,t){var r=0,o=0,a=new Array;return{getBuffer:function(){return a},buffer:a,get:function(e){return(a[Math.floor(e/8)]>>>7-e%8&1)==1},put:function(e,t){for(var o=0;o<t;o++)this.putBit((e>>>t-o-1&1)==1)},getLengthInBits:function(){return r},putBit:function(e){var t=Math.floor(r/8);a.length<=t&&a.push(0),e&&(a[t]|=128>>>r%8),r++}}};return{create:function(e,r){var o=t(0,r||"M");return o.addData(e),o.make(),o}}}();
+
+      // Generate and render QR code
+      var url = "https://helloworld1-rho.vercel.app/";
+      var qr = qrcode.create(url, "M");
+      var size = qr.getModuleCount();
+      var canvas = document.getElementById("qr");
+      var scale = 8;
+      var padding = scale * 4;
+      canvas.width = size * scale + padding * 2;
+      canvas.height = size * scale + padding * 2;
+      var ctx = canvas.getContext("2d");
+      ctx.fillStyle = "#fff9f4";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#3d2b1a";
+      for (var r = 0; r < size; r++) {
+        for (var c = 0; c < size; c++) {
+          if (qr.isDark(r, c)) {
+            ctx.fillRect(c * scale + padding, r * scale + padding, scale, scale);
+          }
+        }
+      }
+    })();
+  </script>
+</body>
+</html>
