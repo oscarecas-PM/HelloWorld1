@@ -76,11 +76,13 @@
     .cat-roots    { border-color: #8b2635; }
     .cat-places   { border-color: #4a7c59; }
     .cat-dreams   { border-color: #c17f4a; }
+    .cat-kiddays  { border-color: #7b68ae; }
 
-    .cat-food   .cat-icon { color: #c9a84c; }
-    .cat-roots  .cat-icon { color: #8b2635; }
-    .cat-places .cat-icon { color: #4a7c59; }
-    .cat-dreams .cat-icon { color: #c17f4a; }
+    .cat-food    .cat-icon { color: #c9a84c; }
+    .cat-roots   .cat-icon { color: #8b2635; }
+    .cat-places  .cat-icon { color: #4a7c59; }
+    .cat-dreams  .cat-icon { color: #c17f4a; }
+    .cat-kiddays .cat-icon { color: #7b68ae; }
 
     /* ── Card Screen ── */
     #card-screen { display: none; flex-direction: column; align-items: center; width: 100%; }
@@ -175,6 +177,7 @@
     .front-roots   { background: linear-gradient(145deg, #8b2635, #5e1220); }
     .front-places  { background: linear-gradient(145deg, #4a7c59, #2d5440); }
     .front-dreams  { background: linear-gradient(145deg, #c17f4a, #8f5828); }
+    .front-kiddays { background: linear-gradient(145deg, #7b68ae, #564889); }
 
     /* Controls */
     .controls { display: flex; gap: 14px; margin-bottom: 24px; }
@@ -200,16 +203,19 @@
     .btn-roots   { background: #8b2635; }
     .btn-places  { background: #4a7c59; }
     .btn-dreams  { background: #c17f4a; }
+    .btn-kiddays { background: #7b68ae; }
 
-    .shuffle-food   { color: #c9a84c; }
-    .shuffle-roots  { color: #8b2635; }
-    .shuffle-places { color: #4a7c59; }
-    .shuffle-dreams { color: #c17f4a; }
+    .shuffle-food    { color: #c9a84c; }
+    .shuffle-roots   { color: #8b2635; }
+    .shuffle-places  { color: #4a7c59; }
+    .shuffle-dreams  { color: #c17f4a; }
+    .shuffle-kiddays { color: #7b68ae; }
 
-    .shuffle-food:hover   { background: #c9a84c !important; }
-    .shuffle-roots:hover  { background: #8b2635 !important; }
-    .shuffle-places:hover { background: #4a7c59 !important; }
-    .shuffle-dreams:hover { background: #c17f4a !important; }
+    .shuffle-food:hover    { background: #c9a84c !important; }
+    .shuffle-roots:hover   { background: #8b2635 !important; }
+    .shuffle-places:hover  { background: #4a7c59 !important; }
+    .shuffle-dreams:hover  { background: #c17f4a !important; }
+    .shuffle-kiddays:hover { background: #7b68ae !important; }
 
     /* Progress */
     .progress { font-size: 0.83rem; color: #8a6a52; letter-spacing: 0.4px; margin-bottom: 8px; }
@@ -222,6 +228,7 @@
     .bar-roots   { background: #8b2635; }
     .bar-places  { background: #4a7c59; }
     .bar-dreams  { background: #c17f4a; }
+    .bar-kiddays { background: #7b68ae; }
   </style>
 </head>
 <body>
@@ -259,6 +266,13 @@
       <div class="cat-info">
         <h2>Dreams &amp; Future</h2>
         <p>What we hope for and where we're headed</p>
+      </div>
+    </div>
+    <div class="cat-card cat-kiddays" onclick="startCategory('kiddays')">
+      <span class="cat-icon">🧸</span>
+      <div class="cat-info">
+        <h2>Kid Days</h2>
+        <p>Fun memories and silly stories from when we were little</p>
       </div>
     </div>
   </div>
@@ -352,6 +366,21 @@
           "What's something you're quietly hopeful about right now?",
           "What do you hope people say about you when you're not in the room?"
         ]
+      },
+      kiddays: {
+        label: 'Kid Days',
+        color: 'kiddays',
+        questions: [
+          "What game or toy could you play with for hours when you were a kid?",
+          "What was your favorite thing to do right after school?",
+          "Did you have a nickname as a kid? How did you get it?",
+          "What was the funniest thing you ever got in trouble for?",
+          "What was your go-to snack when you were little?",
+          "What did you want to be when you grew up — and how close did you get?",
+          "What's a cartoon, show, or movie you were obsessed with as a kid?",
+          "What's the best hiding spot you ever found?",
+          "What was your favorite thing about weekends or summer as a kid?"
+        ]
       }
     };
 
@@ -399,7 +428,7 @@
     }
 
     function getColor(key) {
-      const colors = { food: '#c9a84c', roots: '#8b2635', places: '#4a7c59', dreams: '#c17f4a' };
+      const colors = { food: '#c9a84c', roots: '#8b2635', places: '#4a7c59', dreams: '#c17f4a', kiddays: '#7b68ae' };
       return colors[key];
     }
 
