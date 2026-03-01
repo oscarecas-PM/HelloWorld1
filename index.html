@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Let's Get to Know Each Other</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(150deg, #f7efe4 0%, #ecdcc8 100%);
+      font-family: 'Georgia', serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 36px 20px 40px;
+    }
+
+    /* ── Header ── */
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .header h1 {
+      font-size: 1.65rem;
+      color: #3d2b1a;
+      letter-spacing: 0.4px;
+      margin-bottom: 6px;
+    }
+
+    .header p {
+      font-size: 0.95rem;
+      color: #8a6a52;
+      font-style: italic;
+    }
+
+    /* ── Category Screen ── */
+    #category-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 400px;
+      gap: 16px;
+    }
+
+    .cat-card {
+      width: 100%;
+      border-radius: 16px;
+      padding: 22px 26px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      box-shadow: 0 4px 18px rgba(60, 40, 20, 0.1);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      border-left: 6px solid;
+      background: #fff9f4;
+    }
+
+    .cat-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(60, 40, 20, 0.15);
+    }
+
+    .cat-icon { font-size: 2rem; }
+
+    .cat-info h2 { font-size: 1.05rem; color: #3d2b1a; margin-bottom: 3px; }
+    .cat-info p  { font-size: 0.82rem; color: #8a6a52; font-style: italic; }
+
+    /* Category accent colors */
+    .cat-food     { border-color: #c9a84c; }
+    .cat-roots    { border-color: #8b2635; }
+    .cat-places   { border-color: #4a7c59; }
+    .cat-dreams   { border-color: #c17f4a; }
+
+    .cat-food   .cat-icon { color: #c9a84c; }
+    .cat-roots  .cat-icon { color: #8b2635; }
+    .cat-places .cat-icon { color: #4a7c59; }
+    .cat-dreams .cat-icon { color: #c17f4a; }
+
+    /* ── Card Screen ── */
+    #card-screen { display: none; flex-direction: column; align-items: center; width: 100%; }
+
+    .back-btn {
+      align-self: flex-start;
+      background: none;
+      border: none;
+      font-family: 'Georgia', serif;
+      font-size: 0.9rem;
+      color: #8a6a52;
+      cursor: pointer;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0;
+    }
+    .back-btn:hover { color: #3d2b1a; }
+
+    .cat-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 18px;
+      font-style: normal;
+    }
+
+    /* Flip card */
+    .scene {
+      width: 340px;
+      height: 240px;
+      perspective: 1000px;
+      cursor: pointer;
+      margin-bottom: 28px;
+    }
+
+    .card {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.55s ease;
+    }
+
+    .card.flipped { transform: rotateY(180deg); }
+
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(60, 40, 20, 0.14);
+    }
+
+    .card-front {
+      color: #fff9f4;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .card-front .prompt { font-size: 1.05rem; opacity: 0.9; }
+    .card-front .tap-hint {
+      font-size: 0.72rem;
+      opacity: 0.55;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      position: absolute;
+      bottom: 18px;
+    }
+
+    .card-back {
+      background: #fff9f4;
+      border: 2px solid #ddd0c0;
+      transform: rotateY(180deg);
+    }
+
+    .card-back .question-text {
+      font-size: 1.2rem;
+      line-height: 1.65;
+      color: #3d2b1a;
+    }
+
+    /* Category-colored card fronts */
+    .front-food    { background: linear-gradient(145deg, #c9a84c, #9b7d30); }
+    .front-roots   { background: linear-gradient(145deg, #8b2635, #5e1220); }
+    .front-places  { background: linear-gradient(145deg, #4a7c59, #2d5440); }
+    .front-dreams  { background: linear-gradient(145deg, #c17f4a, #8f5828); }
+
+    /* Controls */
+    .controls { display: flex; gap: 14px; margin-bottom: 24px; }
+
+    button.btn {
+      padding: 11px 26px;
+      border-radius: 50px;
+      font-size: 0.92rem;
+      font-family: 'Georgia', serif;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+    }
+
+    .btn-next  { color: #fff9f4; }
+    .btn-shuffle {
+      background: transparent;
+      border: 2px solid currentColor;
+    }
+    .btn-shuffle:hover { color: #fff9f4 !important; }
+
+    .btn-food    { background: #c9a84c; }
+    .btn-roots   { background: #8b2635; }
+    .btn-places  { background: #4a7c59; }
+    .btn-dreams  { background: #c17f4a; }
+
+    .shuffle-food   { color: #c9a84c; }
+    .shuffle-roots  { color: #8b2635; }
+    .shuffle-places { color: #4a7c59; }
+    .shuffle-dreams { color: #c17f4a; }
+
+    .shuffle-food:hover   { background: #c9a84c !important; }
+    .shuffle-roots:hover  { background: #8b2635 !important; }
+    .shuffle-places:hover { background: #4a7c59 !important; }
+    .shuffle-dreams:hover { background: #c17f4a !important; }
+
+    /* Progress */
+    .progress { font-size: 0.83rem; color: #8a6a52; letter-spacing: 0.4px; margin-bottom: 8px; }
+    .progress-bar-wrap {
+      width: 340px; height: 5px;
+      background: #ddd0c0; border-radius: 10px; overflow: hidden;
+    }
+    .progress-bar { height: 100%; border-radius: 10px; transition: width 0.4s ease; }
+    .bar-food    { background: #c9a84c; }
+    .bar-roots   { background: #8b2635; }
+    .bar-places  { background: #4a7c59; }
+    .bar-dreams  { background: #c17f4a; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>Let's Get to Know Each Other</h1>
+    <p>Pick a category, then take turns answering.</p>
+  </div>
+
+  <!-- Category Selection -->
+  <div id="category-screen">
+    <div class="cat-card cat-food"   onclick="startCategory('food')">
+      <span class="cat-icon">🍜</span>
+      <div class="cat-info">
+        <h2>Food &amp; Flavors</h2>
+        <p>The meals, tastes, and traditions that shape us</p>
+      </div>
+    </div>
+    <div class="cat-card cat-roots"  onclick="startCategory('roots')">
+      <span class="cat-icon">🌿</span>
+      <div class="cat-info">
+        <h2>Roots &amp; Heritage</h2>
+        <p>Where we come from and what we carry forward</p>
+      </div>
+    </div>
+    <div class="cat-card cat-places" onclick="startCategory('places')">
+      <span class="cat-icon">🗺️</span>
+      <div class="cat-info">
+        <h2>Places &amp; Travel</h2>
+        <p>The places that changed us or called us home</p>
+      </div>
+    </div>
+    <div class="cat-card cat-dreams" onclick="startCategory('dreams')">
+      <span class="cat-icon">✨</span>
+      <div class="cat-info">
+        <h2>Dreams &amp; Future</h2>
+        <p>What we hope for and where we're headed</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card Screen -->
+  <div id="card-screen">
+    <button class="back-btn" onclick="goBack()">← Back to categories</button>
+    <p class="cat-label" id="cat-label"></p>
+
+    <div class="scene" onclick="flipCard()">
+      <div class="card" id="card">
+        <div class="card-face card-front" id="card-front">
+          <span class="prompt">A question for the table...</span>
+          <span class="tap-hint">Tap to reveal</span>
+        </div>
+        <div class="card-face card-back">
+          <p class="question-text" id="question-text"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn btn-next"    id="btn-next"    onclick="nextCard()">Next Question</button>
+      <button class="btn btn-shuffle" id="btn-shuffle" onclick="shuffleCards()">Shuffle</button>
+    </div>
+
+    <p class="progress" id="progress-label"></p>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+  </div>
+
+  <script>
+    const categories = {
+      food: {
+        label: 'Food & Flavors',
+        color: 'food',
+        questions: [
+          "What's a dish from your childhood that you could eat every day?",
+          "What's a food from your culture or family that you wish more people knew about?",
+          "What's the most adventurous thing you've ever eaten — and did you love it?",
+          "What does a special family meal look like in your home?",
+          "Is there a flavor or ingredient that instantly takes you back to your roots?",
+          "What's a meal your family makes that you've never quite found anywhere else?",
+          "What would you cook if you wanted to make someone feel completely at home?",
+          "What's a food tradition you hope never gets lost?",
+          "If you had to eat one cuisine for the rest of your life, what would it be — and why?"
+        ]
+      },
+      roots: {
+        label: 'Roots & Heritage',
+        color: 'roots',
+        questions: [
+          "What's a tradition from your background that you want to pass down someday?",
+          "What's something about where you come from that most people would be surprised to learn?",
+          "How has living in — or being connected to — different places shaped who you are?",
+          "What's a story your family tells that gets passed down through generations?",
+          "What does the word 'home' mean to you — is it a place, a feeling, or something else?",
+          "What's a piece of your heritage you're really proud of?",
+          "Is there a custom or celebration from your roots that holds a special place in your heart?",
+          "What's something from your culture you've had to explain to people outside of it?",
+          "Who in your family history do you wish you could have met or known better?"
+        ]
+      },
+      places: {
+        label: 'Places & Travel',
+        color: 'places',
+        questions: [
+          "What's a place you've lived or visited that genuinely changed you?",
+          "What's the most beautiful thing you've ever seen somewhere in the world?",
+          "Is there a city or country you feel a deep, unexplainable connection to?",
+          "What's something unexpected you fell in love with in a place you visited?",
+          "If you could take everyone here to one place in the world, where would it be — and why?",
+          "What place do you dream of returning to someday?",
+          "What's something you discovered about yourself while being far from home?",
+          "Has a place ever surprised you — turned out to be nothing like you expected?",
+          "What's a small, overlooked place that meant more to you than any famous landmark?"
+        ]
+      },
+      dreams: {
+        label: 'Dreams & Future',
+        color: 'dreams',
+        questions: [
+          "What's one thing you hope this group gets to do together someday?",
+          "What does the next chapter of your life look like — what are you moving toward?",
+          "Is there a dream you've carried since you were young that still lives in you?",
+          "What's something you want to learn, experience, or accomplish before you're much older?",
+          "If you could give everyone here one piece of wisdom from your life, what would it be?",
+          "What kind of memories do you hope we make together over the years?",
+          "What does a life well-lived look like to you?",
+          "What's something you're quietly hopeful about right now?",
+          "What do you hope people say about you when you're not in the room?"
+        ]
+      }
+    };
+
+    let currentCat = null;
+    let currentIndex = 0;
+    let order = [];
+    let isFlipped = false;
+
+    function shuffle(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+    }
+
+    function startCategory(key) {
+      currentCat = key;
+      const cat = categories[key];
+      order = [...Array(cat.questions.length).keys()];
+      shuffle(order);
+      currentIndex = 0;
+      isFlipped = false;
+
+      // Apply styles
+      document.getElementById('cat-label').textContent = cat.label;
+      document.getElementById('cat-label').style.color = getColor(key);
+
+      const front = document.getElementById('card-front');
+      front.className = `card-face card-front front-${key}`;
+
+      document.getElementById('card').classList.remove('flipped');
+
+      const btnNext = document.getElementById('btn-next');
+      btnNext.className = `btn btn-next btn-${key}`;
+
+      const btnShuffle = document.getElementById('btn-shuffle');
+      btnShuffle.className = `btn btn-shuffle shuffle-${key}`;
+
+      document.getElementById('progress-bar').className = `progress-bar bar-${key}`;
+
+      updateDisplay();
+
+      document.getElementById('category-screen').style.display = 'none';
+      document.getElementById('card-screen').style.display = 'flex';
+    }
+
+    function getColor(key) {
+      const colors = { food: '#c9a84c', roots: '#8b2635', places: '#4a7c59', dreams: '#c17f4a' };
+      return colors[key];
+    }
+
+    function updateDisplay() {
+      const cat = categories[currentCat];
+      document.getElementById('question-text').textContent = cat.questions[order[currentIndex]];
+      document.getElementById('progress-label').textContent =
+        `Question ${currentIndex + 1} of ${cat.questions.length}`;
+      const pct = ((currentIndex + 1) / cat.questions.length) * 100;
+      document.getElementById('progress-bar').style.width = pct + '%';
+    }
+
+    function flipCard() {
+      const card = document.getElementById('card');
+      if (!isFlipped) {
+        card.classList.add('flipped');
+        isFlipped = true;
+      }
+    }
+
+    function nextCard() {
+      const card = document.getElementById('card');
+      card.classList.remove('flipped');
+      isFlipped = false;
+      currentIndex = (currentIndex + 1) % categories[currentCat].questions.length;
+      setTimeout(updateDisplay, 300);
+    }
+
+    function shuffleCards() {
+      shuffle(order);
+      currentIndex = 0;
+      document.getElementById('card').classList.remove('flipped');
+      isFlipped = false;
+      setTimeout(updateDisplay, 100);
+    }
+
+    function goBack() {
+      document.getElementById('card-screen').style.display = 'none';
+      document.getElementById('category-screen').style.display = 'flex';
+      document.getElementById('card').classList.remove('flipped');
+      isFlipped = false;
+    }
+  </script>
+
+</body>
+</html>
